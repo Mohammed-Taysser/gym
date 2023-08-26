@@ -1,33 +1,12 @@
 import { Avatar, Box, Grid, Typography } from '@mui/material';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { getBodyPart } from '../../core/API';
-import ErrorMessage from '../ErrorMessage';
-import MUISkeleton from '../Skeleton';
 import bodyPartsIcon from '../../assets/images/icons/body-parts.png';
+import AsyncWrapper from '../../containers/AsyncWrapper';
+import { getBodyPart } from '../../core/API';
 
 function BodyParts() {
-  const [isLoading, setIsLoading] = useState(true);
   const [bodyParts, setBodyParts] = useState<string[]>([]);
-  const [error, setError] = useState<Error | undefined>(undefined);
-
-  useEffect(() => {
-    fetchBodyParts();
-  }, []);
-
-  const fetchBodyParts = async () => {
-    setError(undefined);
-    await getBodyPart()
-      .then((response) => {
-        setBodyParts(response.data);
-      })
-      .catch((error) => {
-        setError(error);
-      })
-      .finally(() => {
-        setIsLoading(false);
-      });
-  };
 
   return (
     <Box sx={{ my: 15 }}>
@@ -44,17 +23,18 @@ function BodyParts() {
         Training You <br /> Should Know
       </Typography>
 
-      <ErrorMessage error={error} />
-      {isLoading ? (
-        <MUISkeleton variant='category' />
-      ) : (
+      <AsyncWrapper<BodyParts>
+        apiCall={getBodyPart}
+        variant='category'
+        setData={setBodyParts}
+      >
         <Grid
           container
           columnSpacing={3}
           rowSpacing={3}
           justifyContent='center'
         >
-          {bodyParts.map((part) => (
+          {bodyParts.slice(0, 9).map((part) => (
             <Grid
               key={part}
               item
@@ -81,7 +61,7 @@ function BodyParts() {
             </Grid>
           ))}
         </Grid>
-      )}
+      </AsyncWrapper>
     </Box>
   );
 }

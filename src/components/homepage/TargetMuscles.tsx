@@ -1,33 +1,12 @@
 import { Avatar, Box, Grid, Typography } from '@mui/material';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { getTargetMuscles } from '../../core/API';
-import ErrorMessage from '../ErrorMessage';
-import MUISkeleton from '../Skeleton';
 import targetMusclesIcon from '../../assets/images/icons/target-muscles.png';
+import AsyncWrapper from '../../containers/AsyncWrapper';
+import { getTargetMuscles } from '../../core/API';
 
 function TargetMuscles() {
-  const [isLoading, setIsLoading] = useState(true);
-  const [targetMuscles, setTargetMuscles] = useState<string[]>([]);
-  const [error, setError] = useState<Error | undefined>(undefined);
-
-  useEffect(() => {
-    fetchTargetMuscles();
-  }, []);
-
-  const fetchTargetMuscles = async () => {
-    setError(undefined);
-    await getTargetMuscles()
-      .then((response) => {
-        setTargetMuscles(response.data.slice(0, 9));
-      })
-      .catch((error) => {
-        setError(error);
-      })
-      .finally(() => {
-        setIsLoading(false);
-      });
-  };
+  const [targetMuscles, setTargetMuscles] = useState<TargetMuscles>([]);
 
   return (
     <Box sx={{ my: 15 }}>
@@ -44,17 +23,18 @@ function TargetMuscles() {
         We <br /> Target
       </Typography>
 
-      <ErrorMessage error={error} />
-      {isLoading ? (
-        <MUISkeleton variant='category' />
-      ) : (
+      <AsyncWrapper<TargetMuscles>
+        apiCall={getTargetMuscles}
+        variant='category'
+        setData={setTargetMuscles}
+      >
         <Grid
           container
           columnSpacing={3}
           rowSpacing={3}
           justifyContent='center'
         >
-          {targetMuscles.map((muscle) => (
+          {targetMuscles.slice(0, 9).map((muscle) => (
             <Grid
               key={muscle}
               item
@@ -81,7 +61,7 @@ function TargetMuscles() {
             </Grid>
           ))}
         </Grid>
-      )}
+      </AsyncWrapper>
     </Box>
   );
 }

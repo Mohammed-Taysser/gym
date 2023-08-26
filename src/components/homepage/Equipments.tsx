@@ -1,33 +1,12 @@
 import { Avatar, Box, Grid, Typography } from '@mui/material';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { getEquipments } from '../../core/API';
-import ErrorMessage from '../ErrorMessage';
-import MUISkeleton from '../Skeleton';
 import equipmentsIcon from '../../assets/images/icons/equipments.png';
+import AsyncWrapper from '../../containers/AsyncWrapper';
+import { getEquipments } from '../../core/API';
 
 function Equipments() {
-  const [isLoading, setIsLoading] = useState(true);
   const [equipments, setEquipments] = useState<string[]>([]);
-  const [error, setError] = useState<Error | undefined>(undefined);
-
-  useEffect(() => {
-    fetchEquipments();
-  }, []);
-
-  const fetchEquipments = async () => {
-    setError(undefined);
-    await getEquipments()
-      .then((response) => {
-        setEquipments(response.data.slice(0, 8));
-      })
-      .catch((error) => {
-        setError(error);
-      })
-      .finally(() => {
-        setIsLoading(false);
-      });
-  };
 
   return (
     <Box sx={{ my: 15 }}>
@@ -44,17 +23,18 @@ function Equipments() {
         You <br /> Should Try
       </Typography>
 
-      <ErrorMessage error={error} />
-      {isLoading ? (
-        <MUISkeleton variant='category' />
-      ) : (
+      <AsyncWrapper<Equipments>
+        apiCall={getEquipments}
+        variant='category'
+        setData={setEquipments}
+      >
         <Grid
           container
           columnSpacing={3}
           rowSpacing={3}
           justifyContent='center'
         >
-          {equipments.map((equipment) => (
+          {equipments.slice(0, 8).map((equipment) => (
             <Grid
               key={equipment}
               item
@@ -81,7 +61,7 @@ function Equipments() {
             </Grid>
           ))}
         </Grid>
-      )}
+      </AsyncWrapper>
     </Box>
   );
 }

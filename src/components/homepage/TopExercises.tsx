@@ -8,34 +8,13 @@ import {
   Stack,
   Typography,
 } from '@mui/material';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
+import AsyncWrapper from '../../containers/AsyncWrapper';
 import { getExercises } from '../../core/API';
-import ErrorMessage from '../ErrorMessage';
-import MUISkeleton from '../Skeleton';
 
 function TopExercises() {
-  const [isLoading, setIsLoading] = useState(true);
   const [topExercises, setTopExercises] = useState<Exercise[]>([]);
-  const [error, setError] = useState<Error | undefined>(undefined);
-
-  useEffect(() => {
-    fetchExercises();
-  }, []);
-
-  const fetchExercises = async () => {
-    setError(undefined);
-    await getExercises()
-      .then((response) => {
-        setTopExercises(response.data.slice(0, 9));
-      })
-      .catch((error) => {
-        setError(error);
-      })
-      .finally(() => {
-        setIsLoading(false);
-      });
-  };
 
   return (
     <Box sx={{ my: 15 }}>
@@ -52,10 +31,11 @@ function TopExercises() {
         We <br /> Focus On
       </Typography>
 
-      <ErrorMessage error={error} />
-      {isLoading ? (
-        <MUISkeleton variant='exercise' />
-      ) : (
+      <AsyncWrapper<Exercise[]>
+        apiCall={getExercises}
+        variant='exercise'
+        setData={setTopExercises}
+      >
         <Grid
           container
           columnSpacing={3}
@@ -63,7 +43,7 @@ function TopExercises() {
           justifyContent='center'
           alignItems='stretch'
         >
-          {topExercises.map((exercise) => (
+          {topExercises.slice(0, 9).map((exercise) => (
             <Grid
               key={exercise.id}
               item
@@ -126,7 +106,7 @@ function TopExercises() {
             </Grid>
           ))}
         </Grid>
-      )}
+      </AsyncWrapper>
     </Box>
   );
 }
