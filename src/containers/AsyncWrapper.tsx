@@ -1,14 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import ErrorMessage from '../components/ErrorMessage';
-import { AxiosResponse } from 'axios';
 import MUISkeleton from '../components/Skeleton';
-
-interface AsyncProps<T> {
-  setData: (data: T) => void;
-  apiCall: () => Promise<AxiosResponse<T>>;
-  children: React.ReactNode;
-  variant?: SkeletonVariant;
-}
 
 function AsyncWrapper<T>(props: AsyncProps<T>) {
   const [isLoading, setIsLoading] = useState(true);
