@@ -6,6 +6,7 @@ const ExerciseDetail = lazy(() => import('../pages/public/ExerciseDetail'));
 const NotFound = lazy(() => import('../pages/public/404'));
 const BodyPartDetails = lazy(() => import('../pages/public/BodyPartDetails'));
 const Homepage = lazy(() => import('../pages/public/Homepage'));
+const EquipmentDetails = lazy(() => import('../pages/public/EquipmentDetails'));
 const Exercises = lazy(() => import('../pages/public/Exercises'));
 
 const routes = createBrowserRouter([
@@ -28,6 +29,10 @@ const routes = createBrowserRouter([
       {
         path: '/body-part/:title',
         element: <BodyPartDetails />,
+      },
+      {
+        path: '/equipments/:title',
+        element: <EquipmentDetails />,
       },
       {
         path: '*',
