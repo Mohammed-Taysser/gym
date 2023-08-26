@@ -68,7 +68,7 @@ function BodyPartDetails() {
           variant='exercise'
           setData={onExercisesFetch}
         >
-          <ExercisesGrid exercises={exercises} />
+          <ExercisesGrid exercises={exercises} hide={['bodyPart']} />
 
           {allExercises.length > COUNT && (
             <Pagination

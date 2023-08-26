@@ -68,7 +68,7 @@ function EquipmentDetails() {
           variant='exercise'
           setData={onExercisesFetch}
         >
-          <ExercisesGrid exercises={exercises} />
+          <ExercisesGrid exercises={exercises} hide={['equipment']} />
 
           {allExercises.length > COUNT && (
             <Pagination
