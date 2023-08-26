@@ -1,17 +1,8 @@
-import {
-  Box,
-  Card,
-  CardContent,
-  CardMedia,
-  Chip,
-  Grid,
-  Stack,
-  Typography,
-} from '@mui/material';
+import { Box, Typography } from '@mui/material';
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
 import AsyncWrapper from '../../containers/AsyncWrapper';
 import { getExercises } from '../../core/API';
+import ExercisesGrid from '../grids/Exercises.grid';
 
 function TopExercises() {
   const [topExercises, setTopExercises] = useState<Exercise[]>([]);
@@ -36,76 +27,7 @@ function TopExercises() {
         variant='exercise'
         setData={setTopExercises}
       >
-        <Grid
-          container
-          columnSpacing={3}
-          rowSpacing={3}
-          justifyContent='center'
-          alignItems='stretch'
-        >
-          {topExercises.slice(0, 9).map((exercise) => (
-            <Grid
-              key={exercise.id}
-              item
-              sm={6}
-              md={4}
-              component={Link}
-              to={`/exercises/${exercise.id}`}
-              sx={{ textDecoration: 'none', color: 'black' }}
-            >
-              <Card variant='elevation'>
-                <CardMedia
-                  sx={{ height: 200 }}
-                  image={exercise.gifUrl}
-                  title={exercise.name}
-                />
-                <CardContent>
-                  <Typography
-                    gutterBottom
-                    variant='h5'
-                    component='div'
-                    textTransform='capitalize'
-                    textAlign='center'
-                  >
-                    {exercise.name}
-                  </Typography>
-                  <Stack
-                    direction='row'
-                    justifyContent='center'
-                    alignItems='center'
-                    spacing={2}
-                    mt={2}
-                  >
-                    <Chip
-                      label={exercise.bodyPart}
-                      size='small'
-                      variant='outlined'
-                      color='info'
-                      sx={{ textTransform: 'capitalize' }}
-                      component={Link}
-                      to={`/body-part/${exercise.bodyPart}`}
-                    />
-                    <Chip
-                      variant='outlined'
-                      sx={{ textTransform: 'capitalize' }}
-                      label={exercise.equipment}
-                      color='success'
-                      size='small'
-                      component={Link}
-                      to={`/equipment/${exercise.equipment}`}
-                    />
-                    <Chip
-                      variant='outlined'
-                      sx={{ textTransform: 'capitalize' }}
-                      label={exercise.target}
-                      size='small'
-                    />
-                  </Stack>
-                </CardContent>
-              </Card>
-            </Grid>
-          ))}
-        </Grid>
+        <ExercisesGrid exercises={topExercises.slice(0, 9)} />
       </AsyncWrapper>
     </Box>
   );
