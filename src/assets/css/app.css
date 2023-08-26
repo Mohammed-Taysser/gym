@@ -1,0 +1,31 @@
+body {
+  font-family: 'Ubuntu', sans-serif;
+  background-color: #fff3fd;
+  margin: 0;
+  padding: 0;
+}
+
+::-webkit-scrollbar {
+  width: 0px;
+}
+
+.reset-link {
+  color: #000;
+  text-decoration: none;
+  transition: 0.3s;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+.homepage {
+  .banner {
+    position: relative;
+
+    .banner-image {
+      max-width: 100%;
+      width: 100%;
+    }
+  }
+}
