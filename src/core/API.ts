@@ -13,7 +13,7 @@ import axios from 'axios';
 const exerciseInstance = axios.create({
   baseURL: 'https://exercisedb.p.rapidapi.com/exercises',
   headers: {
-    'X-RapidAPI-Key': '38a7cf783fmsh576755b7aeaccc2p1e4f28jsn2ef351960638',
+    'X-RapidAPI-Key': 'dedf7f4b66msh0b3fbb8d65c52e7p163b32jsncd9f01be0161',
     'X-RapidAPI-Host': 'exercisedb.p.rapidapi.com',
   },
 });
@@ -22,16 +22,20 @@ function getExercises() {
   return exerciseInstance.get<Exercise[]>('/');
 }
 
-function getExercisesByBodyPart(bodyPart: string) {
-  return exerciseInstance.get<Exercise[]>(`/bodyPart/${bodyPart}`);
-}
-
 function getBodyPart() {
   return exerciseInstance.get<BodyParts>('/bodyPartList');
 }
 
+function getExercisesByBodyPart(bodyPart: string) {
+  return exerciseInstance.get<Exercise[]>(`/bodyPart/${bodyPart}`);
+}
+
 function getEquipments() {
   return exerciseInstance.get<Equipments>('/equipmentList');
+}
+
+function getExercisesByEquipment(equipment: string) {
+  return exerciseInstance.get<Exercise[]>(`/equipment/${equipment}`);
 }
 
 function getTargetMuscles() {
@@ -44,4 +48,5 @@ export {
   getEquipments,
   getTargetMuscles,
   getExercisesByBodyPart,
+  getExercisesByEquipment,
 };
