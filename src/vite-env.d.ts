@@ -1,6 +1,6 @@
 /// <reference types="vite/client" />
 
-type SkeletonVariant = 'category' | exercise;
+type SkeletonVariant = 'category' | 'exercise';
 
 type BodyParts = string[];
 
