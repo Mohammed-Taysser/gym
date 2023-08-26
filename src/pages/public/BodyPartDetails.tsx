@@ -7,7 +7,7 @@ import AsyncWrapper from '../../containers/AsyncWrapper';
 import { getExercisesByBodyPart } from '../../core/API';
 
 function BodyPartDetails() {
-  const COUNT = 9;
+  const COUNT = 12;
   const { title = '' } = useParams();
   const [allExercises, setAllExercises] = useState<Exercise[]>([]);
   const [exercises, setExercises] = useState<Exercise[]>([]);
