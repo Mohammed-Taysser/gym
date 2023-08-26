@@ -1,15 +1,17 @@
 import {
+  Button,
   Card,
   CardContent,
   CardMedia,
-  Chip,
   Grid,
   Stack,
   Typography,
 } from '@mui/material';
+import { BiTargetLock } from 'react-icons/bi';
+import { IoMdBody, IoMdFitness } from 'react-icons/io';
 import { Link } from 'react-router-dom';
 
-function ExercisesGrid(props: { exercises: Exercise[] }) {
+function ExercisesGrid(props: ExerciseGridProps) {
   return (
     <Grid
       container
@@ -44,28 +46,46 @@ function ExercisesGrid(props: { exercises: Exercise[] }) {
               >
                 {exercise.name}
               </Typography>
-              <Stack
-                direction='row'
-                justifyContent='center'
-                alignItems='center'
-                spacing={2}
-                mt={2}
-              >
-                <Chip
-                  variant='outlined'
-                  sx={{ textTransform: 'capitalize' }}
-                  label={exercise.equipment}
-                  color='success'
-                  size='small'
-                  component={Link}
-                  to={`/equipment/${exercise.equipment}`}
-                />
-                <Chip
-                  variant='outlined'
-                  sx={{ textTransform: 'capitalize' }}
-                  label={exercise.target}
-                  size='small'
-                />
+              <Stack direction='column' alignItems='flex-start' mt={2}>
+                {!props?.hide?.includes('equipment') && (
+                  <Button
+                    variant='text'
+                    sx={{ textTransform: 'capitalize' }}
+                    color='success'
+                    size='small'
+                    startIcon={<IoMdFitness />}
+                    component={Link}
+                    to={`/equipment/${exercise.equipment}`}
+                  >
+                    {exercise.equipment}
+                  </Button>
+                )}
+
+                {!props?.hide?.includes('bodyPart') && (
+                  <Button
+                    variant='text'
+                    sx={{ textTransform: 'capitalize' }}
+                    color='error'
+                    size='small'
+                    startIcon={<IoMdBody />}
+                    component={Link}
+                    to={`/body-part/${exercise.bodyPart}`}
+                  >
+                    {exercise.bodyPart}
+                  </Button>
+                )}
+
+                {!props?.hide?.includes('target') && (
+                  <Button
+                    variant='text'
+                    sx={{ textTransform: 'capitalize' }}
+                    color='info'
+                    size='small'
+                    startIcon={<BiTargetLock />}
+                  >
+                    {exercise.target}
+                  </Button>
+                )}
               </Stack>
             </CardContent>
           </Card>
