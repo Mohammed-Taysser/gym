@@ -55,7 +55,7 @@ function ExercisesGrid(props: ExerciseGridProps) {
                     size='small'
                     startIcon={<IoMdFitness />}
                     component={Link}
-                    to={`/equipment/${exercise.equipment}`}
+                    to={`/equipments/${exercise.equipment}`}
                   >
                     {exercise.equipment}
                   </Button>
