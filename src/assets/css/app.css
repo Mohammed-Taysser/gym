@@ -5,6 +5,11 @@ body {
   padding: 0;
 }
 
+.img-fluid {
+  max-width: 100%;
+  width: 100%;
+}
+
 ::-webkit-scrollbar {
   width: 0px;
 }
