@@ -18,6 +18,10 @@ const exerciseInstance = axios.create({
   },
 });
 
+function getExerciseById(id: string) {
+  return exerciseInstance.get<Exercise[]>(`/exercise/${id}`);
+}
+
 function getExercises() {
   return exerciseInstance.get<Exercise[]>('/');
 }
@@ -43,6 +47,7 @@ function getTargetMuscles() {
 }
 
 export {
+  getExerciseById,
   getExercises,
   getBodyPart,
   getEquipments,
