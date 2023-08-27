@@ -1,14 +1,15 @@
-import { Container, Pagination, Typography } from '@mui/material';
-import { useState } from 'react';
+import { Alert, Container, Pagination, Typography } from '@mui/material';
+import { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
 import { useSearchParams } from 'react-router-dom';
 import Banner from '../../components/Banner';
 import ExercisesGrid from '../../components/grids/Exercises.grid';
-import AsyncWrapper from '../../containers/AsyncWrapper';
-import { getExercises } from '../../core/API';
+import { RootStoreState } from '../../redux/store';
 
 function Exercises() {
   const COUNT = 18;
-  const [allExercises, setAllExercises] = useState<Exercise[]>([]);
+  const allExercises =
+    useSelector((state: RootStoreState) => state.api.exercises) ?? [];
   const [exercises, setExercises] = useState<Exercise[]>([]);
   const [searchParams, setSearchParams] = useSearchParams();
   const [pagination, setPagination] = useState({
@@ -16,20 +17,23 @@ function Exercises() {
     page: parseInt(searchParams.get('page') ?? '1'),
   });
 
-  const onExercisesFetch = (exercise: Exercise[]) => {
-    setAllExercises(exercise);
-    if (exercise.length > COUNT) {
+  useEffect(() => {
+    if (allExercises.length > COUNT) {
       setExercises(
-        exercise.slice(pagination.page * COUNT, pagination.page * COUNT + COUNT)
+        allExercises.slice(
+          pagination.page * COUNT,
+          pagination.page * COUNT + COUNT
+        )
       );
       setPagination((prev) => ({
         ...prev,
-        limit: Math.floor(exercise.length / COUNT),
+        limit: Math.floor(allExercises.length / COUNT),
       }));
     } else {
-      setExercises(exercise);
+      setExercises(allExercises);
     }
-  };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [allExercises]);
 
   const onPageChange = (_event: React.ChangeEvent<unknown>, value: number) => {
     setExercises(allExercises.slice(value * COUNT, value * COUNT + COUNT));
@@ -46,23 +50,25 @@ function Exercises() {
       </Banner>
 
       <Container maxWidth='md' sx={{ my: 15 }}>
-        <AsyncWrapper<Exercise[]>
-          apiCall={getExercises}
-          variant='exercise'
-          setData={onExercisesFetch}
-        >
-          <ExercisesGrid exercises={exercises} />
+        {!allExercises?.length && (
+          <Alert severity='error'>No Exercises found</Alert>
+        )}
 
-          {allExercises.length > COUNT && (
-            <Pagination
-              count={pagination.limit}
-              page={pagination.page}
-              onChange={onPageChange}
-              sx={{ mt: 5 }}
-              variant='outlined'
-            />
-          )}
-        </AsyncWrapper>
+        {allExercises.length > 0 && (
+          <>
+            <ExercisesGrid exercises={exercises} />
+
+            {allExercises.length > COUNT && (
+              <Pagination
+                count={pagination.limit}
+                page={pagination.page}
+                onChange={onPageChange}
+                sx={{ mt: 5 }}
+                variant='outlined'
+              />
+            )}
+          </>
+        )}
       </Container>
     </>
   );

@@ -1,12 +1,12 @@
-import { Avatar, Box, Grid, Typography } from '@mui/material';
-import { useState } from 'react';
+import { Alert, Avatar, Box, Grid, Typography } from '@mui/material';
+import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import targetMusclesIcon from '../../assets/images/icons/target-muscles.png';
-import AsyncWrapper from '../../containers/AsyncWrapper';
-import { getTargetMuscles } from '../../core/API';
+import { RootStoreState } from '../../redux/store';
 
 function TargetMuscles() {
-  const [targetMuscles, setTargetMuscles] = useState<TargetMuscles>([]);
+  const targetMuscles =
+    useSelector((state: RootStoreState) => state.api.targets) ?? {};
 
   return (
     <Box sx={{ my: 15 }}>
@@ -23,45 +23,49 @@ function TargetMuscles() {
         We <br /> Target
       </Typography>
 
-      <AsyncWrapper<TargetMuscles>
-        apiCall={getTargetMuscles}
-        variant='category'
-        setData={setTargetMuscles}
-      >
-        <Grid
-          container
-          columnSpacing={3}
-          rowSpacing={3}
-          justifyContent='center'
-        >
-          {targetMuscles.slice(0, 9).map((muscle) => (
-            <Grid
-              key={muscle}
-              item
-              md={2}
-              component={Link}
-              to={`/target-muscles/${muscle}`}
-              sx={{ textDecoration: 'none', color: 'black' }}
-            >
-              <Avatar
-                src={targetMusclesIcon}
-                alt='target-muscles-icon'
-                variant='rounded'
-                sx={{ mx: 'auto', mb: 1 }}
-              />
+      {!Object.keys(targetMuscles)?.length && (
+        <Alert severity='error'>No Target Muscles found</Alert>
+      )}
 
-              <Typography
-                variant='subtitle1'
-                textAlign='center'
-                fontWeight={500}
-                textTransform='capitalize'
-              >
-                {muscle}
-              </Typography>
-            </Grid>
-          ))}
-        </Grid>
-      </AsyncWrapper>
+      {Object.keys(targetMuscles).length > 0 && (
+        <>
+          <Grid
+            container
+            columnSpacing={3}
+            rowSpacing={3}
+            justifyContent='center'
+          >
+            {Object.keys(targetMuscles)
+              .slice(0, 8)
+              .map((muscle) => (
+                <Grid
+                  key={muscle}
+                  item
+                  md={2}
+                  component={Link}
+                  to={`/target-muscles/${muscle}`}
+                  sx={{ textDecoration: 'none', color: 'black' }}
+                >
+                  <Avatar
+                    src={targetMusclesIcon}
+                    alt='target-muscles-icon'
+                    variant='rounded'
+                    sx={{ mx: 'auto', mb: 1 }}
+                  />
+
+                  <Typography
+                    variant='subtitle1'
+                    textAlign='center'
+                    fontWeight={500}
+                    textTransform='capitalize'
+                  >
+                    {muscle}
+                  </Typography>
+                </Grid>
+              ))}
+          </Grid>
+        </>
+      )}
     </Box>
   );
 }

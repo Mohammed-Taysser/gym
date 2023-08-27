@@ -1,12 +1,12 @@
-import { Avatar, Box, Grid, Typography } from '@mui/material';
-import { useState } from 'react';
+import { Alert, Avatar, Box, Grid, Typography } from '@mui/material';
+import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import bodyPartsIcon from '../../assets/images/icons/body-parts.png';
-import AsyncWrapper from '../../containers/AsyncWrapper';
-import { getBodyPart } from '../../core/API';
+import { RootStoreState } from '../../redux/store';
 
 function BodyParts() {
-  const [bodyParts, setBodyParts] = useState<string[]>([]);
+  const bodyParts =
+    useSelector((state: RootStoreState) => state.api.bodyParts) ?? {};
 
   return (
     <Box sx={{ my: 15 }}>
@@ -23,45 +23,49 @@ function BodyParts() {
         Training You <br /> Should Know
       </Typography>
 
-      <AsyncWrapper<BodyParts>
-        apiCall={getBodyPart}
-        variant='category'
-        setData={setBodyParts}
-      >
-        <Grid
-          container
-          columnSpacing={3}
-          rowSpacing={3}
-          justifyContent='center'
-        >
-          {bodyParts.slice(0, 9).map((part) => (
-            <Grid
-              key={part}
-              item
-              md={2}
-              component={Link}
-              to={`/body-part/${part}`}
-              sx={{ textDecoration: 'none', color: 'black' }}
-            >
-              <Avatar
-                src={bodyPartsIcon}
-                alt='body-part-icon'
-                variant='rounded'
-                sx={{ mx: 'auto', mb: 1 }}
-              />
+      {!Object.keys(bodyParts)?.length && (
+        <Alert severity='error'>No Body Part found</Alert>
+      )}
 
-              <Typography
-                variant='subtitle1'
-                textAlign='center'
-                fontWeight={500}
-                textTransform='capitalize'
-              >
-                {part}
-              </Typography>
-            </Grid>
-          ))}
-        </Grid>
-      </AsyncWrapper>
+      {Object.keys(bodyParts).length > 0 && (
+        <>
+          <Grid
+            container
+            columnSpacing={3}
+            rowSpacing={3}
+            justifyContent='center'
+          >
+            {Object.keys(bodyParts)
+              .slice(0, 9)
+              .map((part) => (
+                <Grid
+                  key={part}
+                  item
+                  md={2}
+                  component={Link}
+                  to={`/body-part/${part}`}
+                  sx={{ textDecoration: 'none', color: 'black' }}
+                >
+                  <Avatar
+                    src={bodyPartsIcon}
+                    alt='body-part-icon'
+                    variant='rounded'
+                    sx={{ mx: 'auto', mb: 1 }}
+                  />
+
+                  <Typography
+                    variant='subtitle1'
+                    textAlign='center'
+                    fontWeight={500}
+                    textTransform='capitalize'
+                  >
+                    {part}
+                  </Typography>
+                </Grid>
+              ))}
+          </Grid>
+        </>
+      )}
     </Box>
   );
 }

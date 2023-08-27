@@ -1,11 +1,11 @@
-import { Box, Typography } from '@mui/material';
-import { useState } from 'react';
-import AsyncWrapper from '../../containers/AsyncWrapper';
-import { getExercises } from '../../core/API';
+import { Alert, Box, Typography } from '@mui/material';
+import { useSelector } from 'react-redux';
+import { RootStoreState } from '../../redux/store';
 import ExercisesGrid from '../grids/Exercises.grid';
 
 function TopExercises() {
-  const [topExercises, setTopExercises] = useState<Exercise[]>([]);
+  const topExercises =
+    useSelector((state: RootStoreState) => state.api.exercises) ?? [];
 
   return (
     <Box sx={{ my: 15 }}>
@@ -22,13 +22,13 @@ function TopExercises() {
         We <br /> Focus On
       </Typography>
 
-      <AsyncWrapper<Exercise[]>
-        apiCall={getExercises}
-        variant='exercise'
-        setData={setTopExercises}
-      >
+      {topExercises.length <= 0 && (
+        <Alert severity='error'>No Exercises found</Alert>
+      )}
+
+      {topExercises.length > 0 && (
         <ExercisesGrid exercises={topExercises.slice(0, 9)} />
-      </AsyncWrapper>
+      )}
     </Box>
   );
 }

@@ -1,15 +1,19 @@
 import { Alert, Container, Pagination, Typography } from '@mui/material';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { Link, useParams, useSearchParams } from 'react-router-dom';
 import Banner from '../../components/Banner';
 import ExercisesGrid from '../../components/grids/Exercises.grid';
-import AsyncWrapper from '../../containers/AsyncWrapper';
-import { getExercisesByEquipment } from '../../core/API';
+import { getExercisesByEquipment } from '../../redux/exercises.slice';
+import { RootStoreState } from '../../redux/store';
 
 function EquipmentDetails() {
   const COUNT = 12;
+  const dispatch = useDispatch();
   const { title = '' } = useParams();
-  const [allExercises, setAllExercises] = useState<Exercise[]>([]);
+  const allExercises =
+    useSelector((state: RootStoreState) => state.api.exerciseBy.equipment) ??
+    [];
   const [exercises, setExercises] = useState<Exercise[]>([]);
   const [searchParams, setSearchParams] = useSearchParams();
   const [pagination, setPagination] = useState({
@@ -17,24 +21,28 @@ function EquipmentDetails() {
     page: parseInt(searchParams.get('page') ?? '1'),
   });
 
-  if (!title) {
-    return <Alert severity='error'>No Equipment Provide</Alert>;
-  }
+  useEffect(() => {
+    dispatch(getExercisesByEquipment(title));
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [title]);
 
-  const onExercisesFetch = (exercise: Exercise[]) => {
-    setAllExercises(exercise);
-    if (exercise.length > COUNT) {
+  useEffect(() => {
+    if (allExercises.length > COUNT) {
       setExercises(
-        exercise.slice(pagination.page * COUNT, pagination.page * COUNT + COUNT)
+        allExercises.slice(
+          pagination.page * COUNT,
+          pagination.page * COUNT + COUNT
+        )
       );
       setPagination((prev) => ({
         ...prev,
-        limit: Math.floor(exercise.length / COUNT),
+        limit: Math.floor(allExercises.length / COUNT),
       }));
     } else {
-      setExercises(exercise);
+      setExercises(allExercises);
     }
-  };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+}, [allExercises]);
 
   const onPageChange = (_event: React.ChangeEvent<unknown>, value: number) => {
     setExercises(allExercises.slice(value * COUNT, value * COUNT + COUNT));
@@ -63,23 +71,26 @@ function EquipmentDetails() {
       </Banner>
 
       <Container maxWidth='md' sx={{ my: 15 }}>
-        <AsyncWrapper<Exercise[]>
-          apiCall={() => getExercisesByEquipment(title)}
-          variant='exercise'
-          setData={onExercisesFetch}
-        >
-          <ExercisesGrid exercises={exercises} hide={['equipment']} />
+        {!title && <Alert severity='error'>No title Provide</Alert>}
+        {!allExercises?.length && (
+          <Alert severity='error'>No Exercises found</Alert>
+        )}
 
-          {allExercises.length > COUNT && (
-            <Pagination
-              count={pagination.limit}
-              page={pagination.page}
-              onChange={onPageChange}
-              sx={{ mt: 5 }}
-              variant='outlined'
-            />
-          )}
-        </AsyncWrapper>
+        {allExercises.length > 0 && (
+          <>
+            <ExercisesGrid exercises={exercises} hide={['equipment']} />
+
+            {allExercises.length > COUNT && (
+              <Pagination
+                count={pagination.limit}
+                page={pagination.page}
+                onChange={onPageChange}
+                sx={{ mt: 5 }}
+                variant='outlined'
+              />
+            )}
+          </>
+        )}
       </Container>
     </>
   );
