@@ -31,3 +31,15 @@ interface ExerciseGridProps {
   exercises: Exercise[];
   hide?: hide;
 }
+
+interface APIInitState {
+  exercises: Exercise[];
+  equipments: { [key: string]: Exercise[] };
+  targets: { [key: string]: Exercise[] };
+  bodyParts: { [key: string]: Exercise[] };
+  exerciseBy: {
+    equipment?: Exercise[];
+    bodyPart?: Exercise[];
+    id?: Exercise;
+  };
+}
