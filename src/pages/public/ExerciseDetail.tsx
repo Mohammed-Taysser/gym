@@ -1,11 +1,15 @@
-import { Alert, Avatar, Container, Grid, Typography } from '@mui/material';
+import { Alert, Avatar, Box, Container, Grid, Typography } from '@mui/material';
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import bodyPartsIcon from '../../assets/images/icons/body-parts.png';
 import equipmentsIcon from '../../assets/images/icons/equipments.png';
 import targetIcon from '../../assets/images/icons/target.png';
-import { getExerciseById } from '../../redux/exercises.slice';
+import ExercisesGrid from '../../components/grids/Exercises.grid';
+import {
+  getExerciseById,
+  getSimilarExercises,
+} from '../../redux/exercises.slice';
 import { RootStoreState } from '../../redux/store';
 
 function ExerciseDetail() {
@@ -15,19 +19,34 @@ function ExerciseDetail() {
     (state: RootStoreState) => state.api.exerciseBy.id
   );
 
+  const similar = useSelector((state: RootStoreState) => state.api.similar);
+
   useEffect(() => {
     dispatch(getExerciseById(id));
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id]);
+
+  useEffect(() => {
+    if (exercise) {
+      dispatch(getSimilarExercises(exercise));
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [exercise]);
 
   return (
     <Container maxWidth='md' sx={{ my: 15 }}>
       {!id && <Alert severity='error'>No id Provide</Alert>}
-      {!exercise && <Alert severity='error'>No Exercise found</Alert>}
-      {exercise && (
+
+      {!exercise ? (
+        <Alert severity='error'>No Exercise found</Alert>
+      ) : (
         <Grid container columnSpacing={2} rowSpacing={2}>
           <Grid item md={6}>
-            <img src={exercise?.gifUrl} alt={exercise?.name} className='img-fluid' />
+            <img
+              src={exercise?.gifUrl}
+              alt={exercise?.name}
+              className='img-fluid'
+            />
           </Grid>
 
           <Grid item md={6}>
@@ -118,6 +137,58 @@ function ExerciseDetail() {
           </Grid>
         </Grid>
       )}
+
+      <Box mt={10}>
+        {similar.bodyPart.length > 0 ? (
+          <>
+            <Typography fontWeight={700} variant='h3' mb={8} textAlign='center'>
+              Similar{' '}
+              <Typography
+                display='inline-block'
+                fontSize='inherit'
+                fontWeight='inherit'
+                color='primary'
+              >
+                Exercises
+              </Typography>{' '}
+              You <br /> May Like
+            </Typography>
+
+            <ExercisesGrid
+              exercises={similar.bodyPart.slice(0, 6)}
+              hide={['bodyPart']}
+            />
+          </>
+        ) : (
+          <Alert severity='error'>No Exercises found</Alert>
+        )}
+      </Box>
+
+      <Box mt={10}>
+        {similar.equipment.length > 0 ? (
+          <>
+            <Typography fontWeight={700} variant='h3' mb={8} textAlign='center'>
+              Similar{' '}
+              <Typography
+                display='inline-block'
+                fontSize='inherit'
+                fontWeight='inherit'
+                color='primary'
+              >
+                Equipment
+              </Typography>{' '}
+              You <br /> Should Try
+            </Typography>
+
+            <ExercisesGrid
+              exercises={similar.equipment.slice(0, 6)}
+              hide={['equipment']}
+            />
+          </>
+        ) : (
+          <Alert severity='error'>No Exercises found</Alert>
+        )}
+      </Box>
     </Container>
   );
 }
