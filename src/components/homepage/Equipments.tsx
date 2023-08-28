@@ -41,6 +41,7 @@ function Equipments() {
                 <Grid
                   key={equipment}
                   item
+                  xs={3}
                   md={2}
                   component={Link}
                   to={`/equipments/${equipment}`}
