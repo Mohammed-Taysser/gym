@@ -30,6 +30,8 @@ type hide = ['target' | 'equipment' | 'bodyPart'];
 interface ExerciseGridProps {
   exercises: Exercise[];
   hide?: hide;
+  hidePagination?: boolean;
+  count?: number;
 }
 
 interface APIInitState {
@@ -39,7 +41,13 @@ interface APIInitState {
   bodyParts: { [key: string]: Exercise[] };
   exerciseBy: {
     equipment?: Exercise[];
+    target?: Exercise[];
     bodyPart?: Exercise[];
     id?: Exercise;
+  };
+  similar: {
+    equipment: Exercise[];
+    bodyPart: Exercise[];
+    target: Exercise[];
   };
 }
