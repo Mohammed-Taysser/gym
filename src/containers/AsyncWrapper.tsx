@@ -8,6 +8,7 @@ function AsyncWrapper<T>(props: AsyncProps<T>) {
 
   useEffect(() => {
     fetchData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const fetchData = async () => {
