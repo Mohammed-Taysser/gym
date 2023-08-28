@@ -2,11 +2,14 @@ import { lazy } from 'react';
 import { createBrowserRouter } from 'react-router-dom';
 import Layout from '../layout/Base';
 
-const ExerciseDetail = lazy(() => import('../pages/public/ExerciseDetail'));
-const NotFound = lazy(() => import('../pages/public/404'));
-const BodyPartDetails = lazy(() => import('../pages/public/BodyPartDetails'));
 const Homepage = lazy(() => import('../pages/public/Homepage'));
+const NotFound = lazy(() => import('../pages/public/404'));
+const ExerciseDetail = lazy(() => import('../pages/public/ExerciseDetail'));
+const BodyPartDetails = lazy(() => import('../pages/public/BodyPartDetails'));
 const EquipmentDetails = lazy(() => import('../pages/public/EquipmentDetails'));
+const TargetMuscleDetails = lazy(
+  () => import('../pages/public/TargetMuscleDetails')
+);
 const Exercises = lazy(() => import('../pages/public/Exercises'));
 
 const routes = createBrowserRouter([
@@ -27,8 +30,12 @@ const routes = createBrowserRouter([
         element: <Exercises />,
       },
       {
-        path: '/body-part/:title',
+        path: '/body-parts/:title',
         element: <BodyPartDetails />,
+      },
+      {
+        path: '/target-muscles/:title',
+        element: <TargetMuscleDetails />,
       },
       {
         path: '/equipments/:title',
