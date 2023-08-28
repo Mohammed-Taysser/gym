@@ -8,8 +8,14 @@ const initialState: APIInitState = {
   bodyParts: {},
   exerciseBy: {
     equipment: undefined,
+    target: undefined,
     bodyPart: undefined,
     id: undefined,
+  },
+  similar: {
+    equipment: [],
+    target: [],
+    bodyPart: [],
   },
 };
 
@@ -65,8 +71,18 @@ export const apiSlice = createSlice({
       state.exerciseBy.bodyPart = state.bodyParts[action.payload];
     },
 
+    getExercisesByTargetMuscle: (state, action: PayloadAction<string>) => {
+      state.exerciseBy.target = state.targets[action.payload];
+    },
+
     getExercisesByEquipment: (state, action: PayloadAction<string>) => {
       state.exerciseBy.equipment = state.equipments[action.payload];
+    },
+
+    getSimilarExercises: (state, action: PayloadAction<Exercise>) => {
+      state.similar.equipment = state.equipments[action.payload.equipment];
+      state.similar.bodyPart = state.bodyParts[action.payload.bodyPart];
+      state.similar.target = state.targets[action.payload.target];
     },
   },
 });
@@ -76,6 +92,8 @@ export const {
   getExerciseById,
   getExercisesByBodyPart,
   getExercisesByEquipment,
+  getSimilarExercises,
+  getExercisesByTargetMuscle,
 } = apiSlice.actions;
 
 export default apiSlice.reducer;
