@@ -31,7 +31,14 @@ function MUISkeleton(props: { repeat?: number; variant?: SkeletonVariant }) {
 
 const Default = () => {
   return (
-    <Box sx={{ display: 'flex', height: '200px' }}>
+    <Box
+      sx={{
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        height: '400px',
+      }}
+    >
       <CircularProgress />
     </Box>
   );
