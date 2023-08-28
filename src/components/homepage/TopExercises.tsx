@@ -1,10 +1,10 @@
-import { Alert, Box, Typography } from '@mui/material';
+import { Box, Typography } from '@mui/material';
 import { useSelector } from 'react-redux';
 import { RootStoreState } from '../../redux/store';
 import ExercisesGrid from '../grids/Exercises.grid';
 
 function TopExercises() {
-  const topExercises =
+  const exercises =
     useSelector((state: RootStoreState) => state.api.exercises) ?? [];
 
   return (
@@ -22,13 +22,7 @@ function TopExercises() {
         We <br /> Focus On
       </Typography>
 
-      {topExercises.length <= 0 && (
-        <Alert severity='error'>No Exercises found</Alert>
-      )}
-
-      {topExercises.length > 0 && (
-        <ExercisesGrid exercises={topExercises.slice(0, 9)} />
-      )}
+      <ExercisesGrid exercises={exercises} count={9} hidePagination />
     </Box>
   );
 }
