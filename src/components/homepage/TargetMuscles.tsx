@@ -1,7 +1,7 @@
 import { Alert, Avatar, Box, Grid, Typography } from '@mui/material';
 import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
-import targetMusclesIcon from '../../assets/images/icons/target-muscles.png';
+import targetMusclesIcon from '../../assets/images/icons/target.png';
 import { RootStoreState } from '../../redux/store';
 
 function TargetMuscles() {
@@ -41,6 +41,7 @@ function TargetMuscles() {
                 <Grid
                   key={muscle}
                   item
+                  xs={3}
                   md={2}
                   component={Link}
                   to={`/target-muscles/${muscle}`}

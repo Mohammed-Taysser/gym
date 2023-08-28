@@ -42,8 +42,9 @@ function BodyParts() {
                   key={part}
                   item
                   md={2}
+                  xs={3}
                   component={Link}
-                  to={`/body-part/${part}`}
+                  to={`/body-parts/${part}`}
                   sx={{ textDecoration: 'none', color: 'black' }}
                 >
                   <Avatar
