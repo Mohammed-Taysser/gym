@@ -34,11 +34,28 @@ interface ExerciseGridProps {
   count?: number;
 }
 
+interface EquipmentsGridProps {
+  equipments: Category;
+  count?: number;
+}
+
+interface BodyPartsGridProps {
+  bodyParts: Category;
+  count?: number;
+}
+
+interface TargetMusclesGridProps {
+  targetMuscles: Category;
+  count?: number;
+}
+
+type Category = { [key: string]: Exercise[] };
+
 interface APIInitState {
   exercises: Exercise[];
-  equipments: { [key: string]: Exercise[] };
-  targets: { [key: string]: Exercise[] };
-  bodyParts: { [key: string]: Exercise[] };
+  equipments: Category;
+  targets: Category;
+  bodyParts: Category;
   exerciseBy: {
     equipment?: Exercise[];
     target?: Exercise[];
