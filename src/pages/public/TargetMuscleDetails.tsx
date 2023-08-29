@@ -22,8 +22,8 @@ function TargetMuscleDetails() {
     <>
       <Banner>
         <Typography fontWeight={700} variant='h3' textAlign='center'>
-          <Link className='reset-link' to='/exercises'>
-            Exercises
+          <Link className='reset-link' to='/target-muscles'>
+            Target Muscles
           </Link>{' '}
           /{' '}
           <Typography
