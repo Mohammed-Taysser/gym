@@ -46,6 +46,7 @@ function TargetMusclesGrid(props: TargetMusclesGridProps) {
               <Avatar
                 src={targetMusclesIcon}
                 alt='target-muscles-icon'
+                className='effect-rotate'
                 variant='rounded'
                 sx={{ mx: 'auto', mb: 1 }}
               />

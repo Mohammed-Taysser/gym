@@ -47,6 +47,7 @@ function EquipmentsGrid(props: EquipmentsGridProps) {
                 src={equipmentsIcon}
                 alt='equipments-icon'
                 variant='rounded'
+                className='effect-scale'
                 sx={{ mx: 'auto', mb: 1 }}
               />
 

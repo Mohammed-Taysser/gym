@@ -46,6 +46,7 @@ function BodyPartsGrid(props: BodyPartsGridProps) {
               <Avatar
                 src={bodyPartsIcon}
                 alt='body-part-icon'
+                className='effect-scale'
                 variant='rounded'
                 sx={{ mx: 'auto', mb: 1 }}
               />
