@@ -21,7 +21,7 @@ function MUISkeleton(props: { repeat?: number; variant?: SkeletonVariant }) {
   return (
     <Grid container columnSpacing={2} rowSpacing={2}>
       {Array.from({ length: repeat }).map(() => (
-        <Grid key={nanoid()} item md={3}>
+        <Grid key={nanoid()} item xs={6} md={3}>
           <Skt />
         </Grid>
       ))}
