@@ -78,7 +78,6 @@ function ExercisesGrid(props: ExerciseGridProps) {
           <Grid
             key={exercise.id}
             item
-            sm={6}
             md={4}
             component={Link}
             to={`/exercises/${exercise.id}`}
