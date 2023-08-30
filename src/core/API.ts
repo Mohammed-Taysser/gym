@@ -5,7 +5,7 @@ import axios from 'axios';
 const exerciseInstance = axios.create({
   baseURL: 'https://exercisedb.p.rapidapi.com/exercises',
   headers: {
-    'X-RapidAPI-Key': '09a0988b78mshf28f3fed972c666p1a3175jsn86e98b42bd2b',
+    'X-RapidAPI-Key': '04849d31c8mshc2f5544ff88b682p17c43bjsn689d6977e0a9',
     'X-RapidAPI-Host': 'exercisedb.p.rapidapi.com',
   },
 });
