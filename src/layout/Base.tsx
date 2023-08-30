@@ -1,7 +1,8 @@
-import { Box, CircularProgress, CssBaseline } from '@mui/material';
+import { Box, CssBaseline } from '@mui/material';
 import { Suspense, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { Outlet, useLocation } from 'react-router-dom';
+import MUISkeleton from '../components/Skeleton';
 import AsyncWrapper from '../containers/AsyncWrapper';
 import { getExercises } from '../core/API';
 import { initApiCall } from '../redux/exercises.slice';
@@ -34,7 +35,7 @@ function BaseLayout() {
         apiCall={getExercises}
         setData={onExercisesFetch}
       >
-        <Suspense fallback={<CircularProgress />}>
+        <Suspense fallback={<MUISkeleton />}>
           <Outlet />
         </Suspense>
       </AsyncWrapper>
