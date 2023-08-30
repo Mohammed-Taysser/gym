@@ -38,15 +38,13 @@ function ExercisesGrid(props: ExerciseGridProps) {
 
   useEffect(() => {
     if (props.exercises.length > COUNT) {
+      const pageNumber = pagination.page - 1;
       setExercises(
-        props.exercises.slice(
-          pagination.page * COUNT,
-          pagination.page * COUNT + COUNT
-        )
+        props.exercises.slice(pageNumber * COUNT, pageNumber * COUNT + COUNT)
       );
       setPagination((prev) => ({
         ...prev,
-        limit: Math.floor(props.exercises.length / COUNT),
+        limit: Math.ceil(props.exercises.length / COUNT),
       }));
     } else {
       setExercises(props.exercises);
@@ -55,7 +53,9 @@ function ExercisesGrid(props: ExerciseGridProps) {
   }, [props.exercises]);
 
   const onPageChange = (_event: React.ChangeEvent<unknown>, value: number) => {
-    setExercises(props.exercises.slice(value * COUNT, value * COUNT + COUNT));
+    setExercises(
+      props.exercises.slice((value - 1) * COUNT, (value - 1) * COUNT + COUNT)
+    );
 
     setPagination((prev) => ({ ...prev, page: value }));
     setSearchParams({ page: value.toString() });
@@ -65,87 +65,89 @@ function ExercisesGrid(props: ExerciseGridProps) {
     return <Skeleton variant='exercise' />;
   }
 
-  if (exercises.length > 0) {
+  if (props.exercises.length > 0) {
     return (
-      <Grid
-        container
-        columnSpacing={3}
-        rowSpacing={3}
-        justifyContent='center'
-        alignItems='stretch'
-      >
-        {exercises.map((exercise) => (
-          <Grid
-            key={exercise.id}
-            item
-            md={4}
-            component={Link}
-            to={`/exercises/${exercise.id}`}
-            sx={{ textDecoration: 'none', color: 'black' }}
-          >
-            <Card variant='elevation' sx={{ height: '100%' }}>
-              <CardMedia
-                sx={{ height: 200 }}
-                image={exercise.gifUrl}
-                title={exercise.name}
-              />
-              <CardContent>
-                <Typography
-                  gutterBottom
-                  variant='h5'
-                  component='div'
-                  textTransform='capitalize'
-                  textAlign='center'
-                >
-                  {exercise.name}
-                </Typography>
-                <Stack direction='column' alignItems='flex-start' mt={2}>
-                  {!props?.hide?.includes('equipment') && (
-                    <Button
-                      variant='text'
-                      sx={{ textTransform: 'capitalize' }}
-                      color='success'
-                      size='small'
-                      startIcon={<IoMdFitness />}
-                      component={Link}
-                      to={`/equipments/${exercise.equipment}`}
-                    >
-                      {exercise.equipment}
-                    </Button>
-                  )}
+      <>
+        <Grid
+          container
+          columnSpacing={3}
+          rowSpacing={3}
+          justifyContent='center'
+          alignItems='stretch'
+        >
+          {exercises.map((exercise) => (
+            <Grid
+              key={exercise.id}
+              item
+              md={4}
+              component={Link}
+              to={`/exercises/${exercise.id}`}
+              sx={{ textDecoration: 'none', color: 'black' }}
+            >
+              <Card variant='elevation' sx={{ height: '100%' }}>
+                <CardMedia
+                  sx={{ height: 200 }}
+                  image={exercise.gifUrl}
+                  title={exercise.name}
+                />
+                <CardContent>
+                  <Typography
+                    gutterBottom
+                    variant='h5'
+                    component='div'
+                    textTransform='capitalize'
+                    textAlign='center'
+                  >
+                    {exercise.name}
+                  </Typography>
+                  <Stack direction='column' alignItems='flex-start' mt={2}>
+                    {!props?.hide?.includes('equipment') && (
+                      <Button
+                        variant='text'
+                        sx={{ textTransform: 'capitalize' }}
+                        color='success'
+                        size='small'
+                        startIcon={<IoMdFitness />}
+                        component={Link}
+                        to={`/equipments/${exercise.equipment}`}
+                      >
+                        {exercise.equipment}
+                      </Button>
+                    )}
 
-                  {!props?.hide?.includes('bodyPart') && (
-                    <Button
-                      variant='text'
-                      sx={{ textTransform: 'capitalize' }}
-                      color='error'
-                      size='small'
-                      startIcon={<IoMdBody />}
-                      component={Link}
-                      to={`/body-parts/${exercise.bodyPart}`}
-                    >
-                      {exercise.bodyPart}
-                    </Button>
-                  )}
+                    {!props?.hide?.includes('bodyPart') && (
+                      <Button
+                        variant='text'
+                        sx={{ textTransform: 'capitalize' }}
+                        color='error'
+                        size='small'
+                        startIcon={<IoMdBody />}
+                        component={Link}
+                        to={`/body-parts/${exercise.bodyPart}`}
+                      >
+                        {exercise.bodyPart}
+                      </Button>
+                    )}
 
-                  {!props?.hide?.includes('target') && (
-                    <Button
-                      variant='text'
-                      sx={{ textTransform: 'capitalize' }}
-                      color='info'
-                      size='small'
-                      startIcon={<BiTargetLock />}
-                      component={Link}
-                      to={`/target-muscles/${exercise.target}`}
-                    >
-                      {exercise.target}
-                    </Button>
-                  )}
-                </Stack>
-              </CardContent>
-            </Card>
-          </Grid>
-        ))}
+                    {!props?.hide?.includes('target') && (
+                      <Button
+                        variant='text'
+                        sx={{ textTransform: 'capitalize' }}
+                        color='info'
+                        size='small'
+                        startIcon={<BiTargetLock />}
+                        component={Link}
+                        to={`/target-muscles/${exercise.target}`}
+                      >
+                        {exercise.target}
+                      </Button>
+                    )}
+                  </Stack>
+                </CardContent>
+              </Card>
+            </Grid>
+          ))}
+        </Grid>
 
         {!props.hidePagination && props.exercises.length > COUNT && (
           <Pagination
@@ -156,7 +158,7 @@ function ExercisesGrid(props: ExerciseGridProps) {
             variant='outlined'
           />
         )}
-      </Grid>
+      </>
     );
   } else {
     return <Alert severity='error'>No Exercises found</Alert>;
