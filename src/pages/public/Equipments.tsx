@@ -2,9 +2,11 @@ import { Container, Typography } from '@mui/material';
 import { useSelector } from 'react-redux';
 import Banner from '../../components/Banner';
 import EquipmentsGrid from '../../components/grids/Equipments.grid';
+import usePageTitle from '../../hooks/usePageTitle';
 import { RootStoreState } from '../../redux/store';
 
 function Equipments() {
+  usePageTitle(`Equipments`);
   const equipments = useSelector(
     (state: RootStoreState) => state.api.equipments
   );

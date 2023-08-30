@@ -7,6 +7,7 @@ import equipmentsIcon from '../../assets/images/icons/equipments.png';
 import targetIcon from '../../assets/images/icons/target.png';
 import MUISkeleton from '../../components/Skeleton';
 import ExercisesGrid from '../../components/grids/Exercises.grid';
+import usePageTitle from '../../hooks/usePageTitle';
 import {
   getExerciseById,
   getSimilarExercises,
@@ -15,6 +16,7 @@ import { RootStoreState } from '../../redux/store';
 
 function ExerciseDetail() {
   const { id = '' } = useParams();
+  const { setPageTitle } = usePageTitle(`Exercises`);
   const dispatch = useDispatch();
   const [isLoading, setIsLoading] = useState(true);
   const exercise = useSelector(
@@ -30,6 +32,7 @@ function ExerciseDetail() {
 
     const timerId = setTimeout(() => {
       setIsLoading(false);
+      setPageTitle(`Exercises | ${exercise?.name}`);
     }, 1500);
 
     return () => {

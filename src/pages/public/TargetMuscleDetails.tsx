@@ -4,11 +4,13 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Link, useParams } from 'react-router-dom';
 import Banner from '../../components/Banner';
 import ExercisesGrid from '../../components/grids/Exercises.grid';
+import usePageTitle from '../../hooks/usePageTitle';
 import { getExercisesByTargetMuscle } from '../../redux/exercises.slice';
 import { RootStoreState } from '../../redux/store';
 
 function TargetMuscleDetails() {
   const { title = '' } = useParams();
+  usePageTitle(`Target Muscles | ${title}`);
   const dispatch = useDispatch();
   const exercises =
     useSelector((state: RootStoreState) => state.api.exerciseBy.target) ?? [];

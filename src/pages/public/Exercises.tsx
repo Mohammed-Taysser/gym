@@ -2,9 +2,11 @@ import { Container, Typography } from '@mui/material';
 import { useSelector } from 'react-redux';
 import Banner from '../../components/Banner';
 import ExercisesGrid from '../../components/grids/Exercises.grid';
+import usePageTitle from '../../hooks/usePageTitle';
 import { RootStoreState } from '../../redux/store';
 
 function Exercises() {
+  usePageTitle(`Exercises`);
   const exercises = useSelector((state: RootStoreState) => state.api.exercises);
 
   return (

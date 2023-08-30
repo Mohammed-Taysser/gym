@@ -5,9 +5,11 @@ import EquipmentsGrid from '../../components/grids/Equipments.grid';
 import ExercisesGrid from '../../components/grids/Exercises.grid';
 import TargetMusclesGrid from '../../components/grids/TargetMuscles.grid';
 import HeroBanner from '../../components/homepage/HeroBanner';
+import usePageTitle from '../../hooks/usePageTitle';
 import { RootStoreState } from '../../redux/store';
 
 function Homepage() {
+  usePageTitle(`Homepage`);
   const bodyParts = useSelector((state: RootStoreState) => state.api.bodyParts);
   const exercises = useSelector((state: RootStoreState) => state.api.exercises);
   const equipments = useSelector(
